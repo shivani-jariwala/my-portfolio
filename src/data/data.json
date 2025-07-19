@@ -79,5 +79,9 @@
       "details": "Graduated with a strong foundation in engineering principles and practices."
     }
   ],
-  "navigation": ["Home", "Skills", "Experience", "Education"]
+  "navigation": ["Home", "Skills", "Experience", "Education", "Resume"],
+  "resume": {
+    "downloadUrl": "/resume.pdf",
+    "description": "Download my detailed resume to learn more about my experience, skills, and qualifications."
+  }
 }

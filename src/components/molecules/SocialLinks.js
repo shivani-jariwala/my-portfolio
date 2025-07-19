@@ -2,9 +2,11 @@ import Icon from "../atoms/Icon";
 import { Github, Linkedin, Mail } from "lucide-react";
 import data from "../../data/data.json";
 import { motion } from "framer-motion";
+import { useTheme } from "../../context/ThemeContext";
 
 const SocialLinks = () => {
   const { github, linkedin, email } = data.personalInfo.socialLinks;
+  const { isDark } = useTheme();
 
   const container = {
     hidden: { opacity: 0 },
@@ -36,7 +38,7 @@ const SocialLinks = () => {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
       >
-        <Icon className="bg-dark-100 text-white hover:bg-accent-500 shadow-lg">
+        <Icon className={`${isDark ? 'bg-dark-100 text-white' : 'bg-slate-100 text-slate-800'} hover:bg-accent-500 hover:text-white shadow-lg`}>
           <Github size={20} />
         </Icon>
       </motion.a>
@@ -48,7 +50,7 @@ const SocialLinks = () => {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
       >
-        <Icon className="bg-dark-100 text-white hover:bg-accent-500 shadow-lg">
+        <Icon className={`${isDark ? 'bg-dark-100 text-white' : 'bg-slate-100 text-slate-800'} hover:bg-accent-500 hover:text-white shadow-lg`}>
           <Linkedin size={20} />
         </Icon>
       </motion.a>
@@ -58,7 +60,7 @@ const SocialLinks = () => {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
       >
-        <Icon className="bg-dark-100 text-white hover:bg-accent-500 shadow-lg">
+        <Icon className={`${isDark ? 'bg-dark-100 text-white' : 'bg-slate-100 text-slate-800'} hover:bg-accent-500 hover:text-white shadow-lg`}>
           <Mail size={20} />
         </Icon>
       </motion.a>

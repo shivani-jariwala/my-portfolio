@@ -1,7 +1,9 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
+import { useTheme } from "../../context/ThemeContext";
 
 const TimelineItem = ({ date, title, subtitle, children, isLast }) => {
+  const { isDark } = useTheme();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-50px" });
   const [hasAnimated, setHasAnimated] = useState(false);
@@ -27,7 +29,9 @@ const TimelineItem = ({ date, title, subtitle, children, isLast }) => {
       transition={{ duration: 0.5 }}
     >
       <motion.div
-        className="absolute left-0 top-1 w-4 h-4 bg-accent-400 rounded-full border-3 border-dark-100 z-10"
+        className={`absolute left-0 top-1 w-4 h-4 bg-accent-400 rounded-full border-3 z-10 ${
+          isDark ? 'border-dark-100' : 'border-slate-100'
+        }`}
         initial={{ scale: 0 }}
         animate={shouldShow ? { scale: 1 } : { scale: 0 }}
         transition={{ type: "spring", stiffness: 300, damping: 15, delay: 0.2 }}
@@ -44,7 +48,9 @@ const TimelineItem = ({ date, title, subtitle, children, isLast }) => {
       )}
 
       <motion.p
-        className="text-xs font-medium text-accent-400/80 mb-1 tracking-wider"
+        className={`text-xs font-medium mb-1 tracking-wider ${
+          isDark ? 'text-accent-400/80' : 'text-slate-600'
+        }`}
         initial={{ opacity: 0 }}
         animate={shouldShow ? { opacity: 1 } : { opacity: 0 }}
         transition={{ delay: 0.1 }}
@@ -53,7 +59,9 @@ const TimelineItem = ({ date, title, subtitle, children, isLast }) => {
       </motion.p>
 
       <motion.h3
-        className="text-base font-bold text-white"
+        className={`text-base font-bold ${
+          isDark ? 'text-white' : 'text-slate-900'
+        }`}
         initial={{ opacity: 0, y: 10 }}
         animate={shouldShow ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
         transition={{ delay: 0.2 }}
@@ -62,7 +70,9 @@ const TimelineItem = ({ date, title, subtitle, children, isLast }) => {
       </motion.h3>
 
       <motion.p
-        className="text-sm text-accent-400 mb-2"
+        className={`text-sm mb-2 ${
+          isDark ? 'text-accent-400' : 'text-slate-700'
+        }`}
         initial={{ opacity: 0 }}
         animate={shouldShow ? { opacity: 1 } : { opacity: 0 }}
         transition={{ delay: 0.3 }}
@@ -71,7 +81,9 @@ const TimelineItem = ({ date, title, subtitle, children, isLast }) => {
       </motion.p>
 
       <motion.div
-        className="text-slate-300 text-xs leading-relaxed"
+        className={`text-xs leading-relaxed ${
+          isDark ? 'text-slate-300' : 'text-slate-700'
+        }`}
         initial={{ opacity: 0, y: 10 }}
         animate={shouldShow ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
         transition={{ delay: 0.4 }}

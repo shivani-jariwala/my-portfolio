@@ -2,9 +2,11 @@ import TimelineItem from "../components/atoms/TimelineItem";
 import data from "../data/data.json";
 import Head from "next/head";
 import { useEffect, useState } from "react";
+import { useTheme } from "../context/ThemeContext";
 
 const EducationPage = () => {
   const [educations, setEducations] = useState([]);
+  const { isDark } = useTheme();
 
   useEffect(() => {
     // Set education data after component mounts
@@ -22,7 +24,9 @@ const EducationPage = () => {
       </Head>
       <section className="h-full py-10 px-6 overflow-auto font-mono tracking-tight">
         <div className="container mx-auto">
-          <h2 className="text-3xl font-bold text-center text-white mb-8">
+          <h2 className={`text-3xl font-bold text-center mb-8 ${
+            isDark ? 'text-white' : 'text-slate-900'
+          }`}>
             My <span className="text-accent-400">Education</span>
           </h2>
           <div className="max-w-3xl mx-auto space-y-8">
@@ -39,7 +43,9 @@ const EducationPage = () => {
                 </TimelineItem>
               ))
             ) : (
-              <div className="text-center text-slate-400">
+              <div className={`text-center ${
+                isDark ? 'text-slate-400' : 'text-slate-600'
+              }`}>
                 Loading education data...
               </div>
             )}

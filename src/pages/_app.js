@@ -1,6 +1,7 @@
 import Layout from "../components/layout/Layout";
 import "../styles/globals.css";
 import { Roboto_Mono } from "next/font/google";
+import { ThemeProvider } from "../context/ThemeContext";
 
 const robotoMono = Roboto_Mono({
   subsets: ["latin"],
@@ -15,7 +16,13 @@ export default function App({ Component, pageProps }) {
         @import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;600;700&display=swap");
         body {
           font-family: "Roboto Mono", monospace;
+          transition: background-color 0.3s ease;
+        }
+        .dark body {
           background-color: #0f172a; /* bg-slate-900 */
+        }
+        .light body {
+          background-color: #f8fafc; /* bg-slate-50 */
         }
         .animate-wave {
           animation: wave-animation 2.5s infinite;
@@ -47,11 +54,13 @@ export default function App({ Component, pageProps }) {
           }
         }
       `}</style>
-      <main className={`${robotoMono.variable}`}>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </main>
+      <ThemeProvider>
+        <main className={`${robotoMono.variable}`}>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </main>
+      </ThemeProvider>
     </>
   );
 }

@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import NavLink from "../atoms/NavLink";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Sun, Moon } from "lucide-react";
 import data from "../../data/data.json";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useTheme } from "../../context/ThemeContext";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -13,6 +14,7 @@ const Header = () => {
   const navLinks = data.navigation;
   const router = useRouter();
   const currentPath = router.pathname;
+  const { isDark, toggleTheme } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -41,48 +43,77 @@ const Header = () => {
     >
       <motion.div
         className={`flex items-center justify-between max-w-3xl w-full backdrop-blur-md rounded-full px-5 py-3 transition-all duration-300 ${
-          scrolled ? "bg-dark-200/70 shadow-lg" : "bg-dark-200/40"
-        } border border-slate-700/30`}
+          scrolled 
+            ? isDark ? "bg-dark-200/70 shadow-lg" : "bg-white/70 shadow-lg" 
+            : isDark ? "bg-dark-200/40" : "bg-white/40"
+        } ${isDark ? 'border-slate-700/30' : 'border-slate-300/30'} border`}
         layoutId="navbarContainer"
         style={{
           boxShadow: scrolled
-            ? "0 10px 30px -10px rgba(0, 0, 0, 0.3)"
-            : "0 8px 20px -8px rgba(0, 0, 0, 0.2)",
+            ? isDark 
+              ? "0 10px 30px -10px rgba(0, 0, 0, 0.3)"
+              : "0 10px 30px -10px rgba(0, 0, 0, 0.1)"
+            : isDark
+              ? "0 8px 20px -8px rgba(0, 0, 0, 0.2)"
+              : "0 8px 20px -8px rgba(0, 0, 0, 0.05)",
         }}
       >
-        {/* Logo */}
-        <Link href="/" passHref>
-          <motion.div
-            className="flex items-center gap-2 cursor-pointer"
-            whileHover={{ scale: 1.05 }}
+        {/* Logo and Theme Toggle */}
+        <div className="flex items-center gap-4">
+          <Link href="/" passHref>
+            <motion.div
+              className="flex items-center gap-2 cursor-pointer"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ type: "spring", stiffness: 400, damping: 17 }}
+            >
+              <motion.svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className={`${
+                  isDark ? 'text-accent-400' : 'text-slate-800'
+                }`}
+                whileHover={{
+                  rotate: [0, 15, -15, 0],
+                  transition: { duration: 0.5 },
+                }}
+              >
+                <path d="m18 16 4-4-4-4" />
+                <path d="m6 8-4 4 4 4" />
+                <path d="m14.5 4-5 16" />
+              </motion.svg>
+              <span className={`text-xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                {data.personalInfo.name}
+              </span>
+            </motion.div>
+          </Link>
+
+          {/* Theme Toggle Button */}
+          <motion.button
+            onClick={toggleTheme}
+            className={`p-2 rounded-full transition-colors duration-200 border ${
+              isDark 
+                ? 'bg-dark-100/50 hover:bg-dark-100/80 border-slate-700/30' 
+                : 'bg-slate-100/50 hover:bg-slate-200/80 border-slate-300/30'
+            }`}
+            whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
             transition={{ type: "spring", stiffness: 400, damping: 17 }}
           >
-            <motion.svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="28"
-              height="28"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="text-accent-400"
-              whileHover={{
-                rotate: [0, 15, -15, 0],
-                transition: { duration: 0.5 },
-              }}
-            >
-              <path d="m18 16 4-4-4-4" />
-              <path d="m6 8-4 4 4 4" />
-              <path d="m14.5 4-5 16" />
-            </motion.svg>
-            <span className="text-xl font-bold text-white">
-              {data.personalInfo.name}
-            </span>
-          </motion.div>
-        </Link>
+            {isDark ? (
+              <Sun size={20} className="text-yellow-400" />
+            ) : (
+              <Moon size={20} className="text-slate-600" />
+            )}
+          </motion.button>
+        </div>
 
         {/* Desktop Nav - Floating Capsule Style */}
         <motion.nav
@@ -125,7 +156,9 @@ const Header = () => {
 
                   {!active && isHovered && (
                     <motion.div
-                      className="absolute inset-0 bg-dark-100/60 rounded-full"
+                      className={`absolute inset-0 rounded-full ${
+                        isDark ? 'bg-dark-100/60' : 'bg-slate-200/60'
+                      }`}
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
@@ -151,10 +184,14 @@ const Header = () => {
         <div className="md:hidden">
           <motion.button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="text-white p-2 rounded-full bg-dark-100/60 border border-slate-700/30"
+            className={`p-2 rounded-full border transition-colors duration-200 ${
+              isDark 
+                ? 'text-white bg-dark-100/60 border-slate-700/30' 
+                : 'text-slate-800 bg-slate-100/60 border-slate-300/30'
+            }`}
             whileTap={{ scale: 0.9 }}
             whileHover={{
-              backgroundColor: "rgba(167, 139, 250, 0.2)",
+              backgroundColor: isDark ? "rgba(167, 139, 250, 0.2)" : "rgba(167, 139, 250, 0.1)",
               transition: { duration: 0.2 },
             }}
           >
@@ -166,7 +203,11 @@ const Header = () => {
       {/* Mobile Menu - Floating Style */}
       {isMenuOpen && (
         <motion.div
-          className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-[90%] max-w-xs md:hidden bg-dark-200/80 backdrop-blur-md rounded-2xl border border-slate-700/30 overflow-hidden shadow-lg"
+          className={`absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-[90%] max-w-xs md:hidden backdrop-blur-md rounded-2xl border overflow-hidden shadow-lg ${
+            isDark 
+              ? 'bg-dark-200/80 border-slate-700/30' 
+              : 'bg-white/80 border-slate-300/30'
+          }`}
           initial={{ opacity: 0, y: -10, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -10, scale: 0.95 }}
@@ -177,7 +218,9 @@ const Header = () => {
             damping: 30,
           }}
           style={{
-            boxShadow: "0 10px 30px -10px rgba(0, 0, 0, 0.3)",
+            boxShadow: isDark 
+              ? "0 10px 30px -10px rgba(0, 0, 0, 0.3)"
+              : "0 10px 30px -10px rgba(0, 0, 0, 0.1)",
           }}
         >
           <nav className="flex flex-col items-center gap-2 py-3">

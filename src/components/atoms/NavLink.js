@@ -1,12 +1,18 @@
 import { motion } from "framer-motion";
+import { useTheme } from "../../context/ThemeContext";
 
-const NavLink = ({ children, isActive, onClick }) => (
-  <button
-    onClick={onClick}
-    className={`relative text-base font-medium transition-colors duration-300 px-4 py-2 ${
-      isActive ? "text-white" : "text-slate-300 hover:text-white"
-    }`}
-  >
+const NavLink = ({ children, isActive, onClick }) => {
+  const { isDark } = useTheme();
+  
+  return (
+    <button
+      onClick={onClick}
+      className={`relative text-base font-medium transition-colors duration-300 px-4 py-2 ${
+        isActive 
+          ? isDark ? "text-white" : "text-slate-900" 
+          : isDark ? "text-slate-300 hover:text-white" : "text-slate-700 hover:text-slate-900"
+      }`}
+    >
     <span className="relative z-10">{children}</span>
 
     {!isActive && (
@@ -19,6 +25,7 @@ const NavLink = ({ children, isActive, onClick }) => (
       />
     )}
   </button>
-);
+  );
+};
 
 export default NavLink;
